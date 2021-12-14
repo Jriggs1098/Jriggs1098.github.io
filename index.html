@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Documentation - Jack Riggs</title>
+	<script src="https://d3js.org/d3.v3.min.js"></script>
+    <style>
+        .nav {
+            font-size: 20px;
+            padding-right: 20px 
+        }
+    </style>
+</head>
+<body>
+    
+    <div style="text-align: left; width: 1000px; margin-left: 30px; margin-top: 10px;">
+        <a class="nav" href="index.html">Link to Documentation</a>
+        <a class="nav" href="visualization.html">Link to Online Visualization</a>
+        <a class="nav" href="https://www.youtube.com/watch?v=e_QN16rmmns" target="_blank">Link to Video Overview</a>
+        
+        <h1>H517 Project 2 - Jack Riggs</h1>
+        <h2>Documentation and Design Process</h2>
+        
+        <h3>Introduction</h3>
+        <p>
+        League of Legends is one of the most popular online multiplayer games. The game revolves around two teams of five players each attempting to destroy the other team's base first. If a player is on the winning team, they will earn a varying amount of League Points (LP), while the losing players will lose LP. While the LP gains/losses are not specifically defined, the range is generally between 13-18 depending on various factors that have not been explicitly mentioned by the game's developers. Generally speaking, a player is considered "high-elo", or highly-ranked, if they are in the top 0.1% of players in their region, divided into the tiers "Master", "Grandmaster", and "Challenger" depending on their amount of LP. The main goal of this project is to understand if any relationships stem from the number of games a person plays, specifically in regards to either their total LP or win rates. Additional goals of this project are to determine what other factors might affect a player's ranked tier, LP, win rate, or games played, such as how long they have been a high-ranked player, the type of gamemode they typically play, or their ranked tier in general.
+        </p>
+        
+        <h3>Dataset</h3>
+        <p>
+        The dataset used for this visualization came from <a href="https://www.kaggle.com/jasperan/league-of-legends-master-players" target="_blank">Kaggle</a> and provided data from "high-elo" (highly-ranked) players for the online game League of Legends. This dataset is a collection of data from 30,000 of the game's players that were collected by the dataset's author using the Riot Games API. The CSV file for the dataset was modified to remove irrelevant data (mostly unique identifiers used for/by the API). The dataset was is modified using JavaScript whenever the visualization page loads to create more usable attributes. Below is a brief description of attributes in the dataset, including those that were added/modified on loading of the webpage:</p>
+            <ul>
+                <li><b>id: </b>A sequential id value for each item in the dataset.</li>
+                <li><b>tier: </b>The ranked tier of the player.</li>
+                <li><b>veteran: </b>Whether or not the player has been in this tier in a previous season (year of playing the game)</li>
+                <li><b>wins:</b> Total number of wins for the player.</li>
+                <li><b>losses:</b> Total number of losses for the player.</li>
+                <li><b>totalgames:</b> Total number of games for a player.</li>
+                <li><b>winrate:</b> The percentage of games a player has won (wins/totalgames).</li>
+                <li><b>region:</b> Region of the player (i.e. where they play the game).</li>
+                <li><b>activity:</b> Whether or not the player actively plays the game (within the last month).</li>
+                <li><b>hotstreak:</b> Whether or not the player has been on a win streak (3 or more wins in a row).</li>
+                <li><b>queue:</b> The type of queue (gamemode) the rank was achieved in.</li>
+                <li><b>freshblood:</b> Whether or not the player has recently achieved this ranked tier.</li>
+                <li><b>summonername:</b> Player's in-game name.</li>
+                <li><b>leaguepoints:</b> Total number of points that a player has achieved.</li>
+            </ul>
+        
+        <h3>Design Process</h3>
+        
+        <h4>Design of Visualization</h4>
+        
+        <p>
+        I knew from the start that the main way I wanted to visualize the data was in a couple of charts that could be edited based on filters selected by the user. While I knew for sure that one of these filters was going to be an interactive map to select a specific region's data (mostly because I thought it was a cool idea), I was not entirely sure what other features would be relevant as filters, so initial sketches either used placeholder text for "filters", or just listed all of the attributes in the dataset. The image below shows a simple initial sketch that was made in order to help narrow down how I wanted to layout the visualization. This initial sketch was made under the assumption that the main filter for the data would be viewing data by either Rank or Region, but this was very quickly changed because it was obvious that providing the option to view both filters was morer useful.
+        </p>
+        
+        <img alt="Simple sketch to determine layout of visualization." src="simple-initial-sketch.jpg" width="500px">
+        
+        <p>
+        Based on this idea, a new sketch was made that incorporated additional filter ideas/locations and suggested providing a table at the bottom of the page of the data that was being shown in the visualization. Although the table idea did not move forward, this section was instead used to eventually show the filters and additional charts for the visualization.
+        </p>
+        
+        <img alt="Sketch showing a more definitive idea for the layout." src="second-sketch.jpg" width="500px">
+        
+        <p>
+        After finalizing a layout for the visualization, I began working on the types of charts that I wanted to showw. After composing a list of possible ideas for charts that could be used to answer the initial questions posed, it was decided that the main charts should focus on stats and their relationships to the number of games a person plays. As seen in the image below, the initial idea was to show a single line/scatter chart that used 2 different y-axis scales to show LP and Win Rate compared to the number of games. However, it was decided that this should be broken up into separate charts because: 1. The chart would be difficult to comprehend on first viewing, and 2. This chart would imply that there is a relationship between LP and Win Rate, and although there might be, it could be misleading to show users two likely independent variables in the same chart. this chart also suggested showing only one chart at a time and switching based on the user's selection, but it was decided that it would benefit the user to show both charts side-by-side.
+        </p>
+        
+        <img alt="Initial idea for the main charts used." src="chart-ideas.jpg" width="500px">
+        
+        <p>
+        The image below shows the final sketch used to define the charts that would be shown, as well as possible interactions for the data outside of selecting filters. It was decided that 2 scatter charts would be used to show the LP and Win Rate based on number of games, and then 3 pie charts would be used to show the breakdown of different aspects among that data. By hovering either the scatter or pie charts, the data in the other charts would temporarily change to show the breakdown of that specific section. The idea behind these temporary changes was that it wouwld allow a user to quickly view differences between different aspects without needing to constantly change the filter then find the same section they were looking at. For example, a user can quickly view the breakdown of North America's LP and Win Rates by rank by selecting the NA region then hoving over the different ranks in the Ranked Tier pie chart to get an understanding of the effect of Rank on the dataset.
+        </p>
+        
+        <img alt="Final idea for the main charts used." src="final-chart-ideas.jpg" width="500px">
+        
+        <h4>Colors</h4>
+        
+        <p>
+        Colors were used in this visualization various reasons which included: distinguishing between the different Regions, visualizing the different ranks in the two scatter charts, and diffentiating between the different pieces of the additional pie charts shown at the bottom of the visualization section.
+        <br>
+        I initially wanted to use a set of colorblind-safe colors for the different regions a user could select, but in the end the colors seemed out of place simply because of the fact that there were 11 different variables to color. Instead of this, I chose a set of colors that were not colorblind-safe but looked more similar to the style of the rest of the  visualization. Although the colors were not colorblind-safe, I was able to make some edits to make this section more accessible for all types of users. First, I tried to make sure that two similar colors were not directly next to each other (such as green and green, or light blue and light green). While this did not necessarily make it color blind safe for all users, it at elast made it easier to distinguish between the different regions when there were many in the same area. To make this more accessible for people wwho were color blind, I made the map's legend interactive, meaning that even if a user cannot differentiate the colors they can still use the text for each item to select a region in the same way they would by hovering over the actual regions in the map. 
+        </p>
+        
+        <img alt="Region Selection section showing the colors used for the map." src="map-colors.PNG" width="500px">
+        
+        <p>
+        A final note about the map's color is that the Server locations are shown in somewhat odd green color. The main reason for this was that it stands out against all of the colors on the map, while still making sure the main highlight of this section is the ability to select a region for the dataset. I had previously tried using white or black, but these were more difficult to see on the map even when made larger on hover interactions.
+        <br>
+        For differentiating ranks and pie chart values by color, I used <a href="https://colorbrewer2.org/#type=sequential&scheme=BuGn&n=3" target="_blank">Color Brewer</a> to simply select colors that matched the theme of the visualization that I was going for but were still colorblind-safe. It was much easier to use colorblind-safe colors here because there were far less variables, making it easier to find and use a specific style of colors.
+        </p>
+        
+        <img alt="Colors used for the pie chart values and different ranks." src="chart-colors.PNG" width="700px" style="border: 1px solid black">
+        
+        <h4>Shapes</h4>
+        
+        <p>
+        The use of different shapes in scatter charts was a last-minute addition. The charts initially used only circles to show the data. However, as I began to do final checks over the visualization, I thought it could be relevant to provide additional information in the charts surrounding which players were on a hot streak (3 or more win streak). While this information is not completely useful or useless, I felt that it was a relatively easy addition that could be made to visually represent another factor of the dataset. Because of this, squares are created instead of circles in the scatter charts when a player has a winstreak in the dataset. Again, this information is likely not super relevant to the questions at hand, but could still provide insights for some users if they have specific questions surrounding winstreaks.
+        </p>
+        
+        <h3>Data Analysis</h3>
+        
+        <p>
+        This visualization was created with the following initial questions in mind:
+        </p>
+        <ul>
+            <li>Is there a relationship between the number of games played and total League Points?</li>  
+                <ul>
+                    <li>What factors (if any) have an effect on a player's League Points/Games played (queue type, veteran status, region, etc.)?</li>
+                </ul>
+            <li>Which regions have the greatest number of High Elo players?</li>
+            <li>What is the average number of League Points per Ranked Tier?</li>
+        </ul>
+        
+        <p>
+        Answers to these questions can be found below, as well as additional notes that were formed while creating the visualization.
+        </p>
+        
+        <h4>Is there a relationship between the number of games played and total League Points?</h4>
+        <p>
+        When viewing the data for all regions with not filters applied (image below), it seems obvious that there is no relationship between the number of games a person has played and their LP. However, this is likely a result of the large difference in minimum and maximum LP, as well as the fact that some ranks require a player to reach a certain LP, suggesting that it is possible that a relationship might exist when viewing the data by each rank. While viewing all regions and all ranks, it is possible to see a relationship between number of games and winrates, where it appears that although it is not obvious that X number of games means X win rate, as a player plays more games they get close to a 50% win rate where the average line appears to plateau.
+        </p> 
+        <img alt="Relationship between number of games and LP/WR." src="chart-games-relationships.PNG" width="700px" style="border: 1px solid black">
+        
+        <p>
+        The three images shown below show the data from all regions by each rank (Master, Grandmaster, and Challenger respectively). Similar to viewing all ranks at a time, there does not appear to be an obvious relationship between games and LP like there is with the win rates. However, it does seem prominent in the Grandmaster and Challenger average lines that as a person plays more games, they are likely to have more LP. While the average line does indicate this general relationship, it is not indicative of all players, as we can see in both charts that there are a lot of data points above and below the lines. The main conclusion that I can gather from this information is that a person who plays more games has a higher change of obtaining more LP, which makes sense as players also get closer to 50% win rates, meaning their LP gains will likely be minimal if they are winning and losing an equal number of games.
+        </p> 
+        <img alt="Relationship between number of games and LP/WR for Master rank." src="master-games-relationship.PNG" width="700px" style="border: 1px solid black">
+        <img alt="Relationship between number of games and LP/WR for Grandmaster rank." src="gm-games-relationship.PNG" width="700px" style="border: 1px solid black">
+        <img alt="Relationship between number of games and LP/WR for Challenger rank." src="challenger-games-relationship.PNG" width="700px" style="border: 1px solid black">
+        
+        <h5>What factors have an effect on a players LP/Win Rate or games played?</h5>
+        <p>
+        The first image shown below shows the data for all regions and players who are new to being highly-ranked (not veterans). The second image shows the same data but for veteran players, meaning they have been highly-ranked before. Although the conclusion is still the same as above regarding a relationship between LP or Win Rate and games played, it might be important to note that there is a higher percentage of Challenger players who are veteran players who also have a higher Max LP compared to non-veterans. This suggests that if you are a veteran player, you might be more likely to have more LP than someone who is not a veteran.
+        </p> 
+        
+        <img alt="Relationship between number of games and LP/WR for new players." src="veteran-status-1.PNG" width="700px" style="border: 1px solid black">
+        <img alt="Relationship between number of games and LP/WR for veteran players." src="veteran-status-2.PNG" width="700px" style="border: 1px solid black">
+        
+        <br>
+        <h4>Which regions have the greatest number of High Elo players?</h4>
+        <p>
+        The region with the highest number of high-elo players is Europe West (EUW) with 7943, followed by Brazil (BR) at 5335 and Korea (KR) at 5333. However, this value does not necessarily reflect an accurate conclusion because there are a differing number of players in each region and this dataset only focused on a select number of highly-ranked players from each region. A better aspect to focus on for this question might be how the different regions differ from each other. One example of a finding from this second question is that although North America (NA) is in the has about the middle number of high-elo players at 3603, it has the highest maximum LP of 2021 and one of the highest average LP at 275. EUW may have the most number of players in this dataset, but it also has a lower maximum LP and average LP (1658 and 200 respectively). The regions with more players in this dataset also tend to have a larger proportion of their players in Master tier, such as KR at 79.92% while LAS is at 61.46% with the Grandmaster and Challenger player pertentage effectively doubling in LAS over KR. While these stats do not mean that one region is greater than another, it suggest that other factors might be in play that could be looked at in both this dataset and other dataset. One example of this is that the the minimum entry LP for Grandmaster in LAS appears to be around 200 LP, while in KR it is closer to 400. Is this because one region simply has more players overall so it is more competetive in higher ranks? Or are there other factors such as the amount of time or games someone plays in a day. By comparing this dataset to other types of League of Legends datasets, it may be possible to uncover a more accurate solution.
+        </p> 
+        
+        <br>
+        <h4>What is the average number of League Points per Ranked Tier?</h4>
+        <p>
+        When looking at all regions, the average number of LP for each tier is as follows: 104 for Master tier, 475 for Grandmaster, and 880 for Challenger.
+        <br><br>
+        If all regions are chosen but a focus is put only on Ranked Solo/Duo Queue, the average LP for each rank stays pretty similar: 112, 491, and 892 respectively for the increasing ranks.
+        <br><br>
+        When looking at the Ranked Flex queue, the values are generally much lower with 41 LP for Master, 300 for Grandmaster, and 773 for Challenger. However, the average winrate jumps from 54% for the previous two categories up to 59%, with a maximum winrate of 98%.
+        <br><br>
+        One of the most likely reasons for the overall drop in LP is that there are far less players in Flex than the Solo/Duo queue at only 3020 across all regions (10% of all players in the dataset). While this drop in players does not on its own affect the LP totals, it does likely lead to other factors that in turn lead to lower LP (but still stem from the number of players). The main finding based on this aspect is that players have almost half the number of games in Flex as those do in Solo/Duo. For all regions, the number of games range from 20 -  3682, with most players being between about 50 and 2000. However, for flex players, the number of games range from 19-1512, with most players being between about 50 and 800 games. As we established in the first question posed, players are more likely to have more LP if they play more games. Although Flex queue has a higher max LP than Solo/Duo, the average values all tend to be between 60 and 100 points lower, increasing with the Ranked Tier. The highest number of games played for Flex players appears to be around 200-300 games, whereas most Ranked Solo players have at least double these amount of games. Based on this data and my own experiences, it seems like Flex queue is used more by players who might be looking for a break from the Solo/Duo queue. One reason for this might be that Flex allows players to play the ranked games with a group of friends as opposed to alone, which could also indicate why there are less games played in this mode overall. If a someone only plays Flex when they are with friends, it is likely that they might be playing Solo/Duo mode when their group of friends is not available. From my experience, it is also more likely that people play more games in Solo/Duo because there are more players at a given time, meaning it is much faster to get into a game, allowing players to get more games in during a "gaming session". For example, most game-matching times in the Solo/Duo mode take about 1-5 minutes based on the time of day. On the contrary, waiting for a Flex game during non-peak times of the day (or even of the week) can take at least 10-20 minutes, time that could be spent playing a game in the Solo/Duo mode.
+        <br><br>
+        As for the higher rank that was pointed out in Flex queue, one rationale for this might just be there there is a smaller sample size, meaning this average value of 59% is slightly skewed. This could be supported by the fact that Solo/Duo has nearly 10 times more players than Flex, and the average winrate is only 5% lower. Because of this, it is not really possible to make an accurate conclusion based on winrates. It should also be noted that Flex win rates tend to follow the pattern suggested earlier in this discussion where more games tends to mean a win rate closer to 50%.
+        </p> 
+        <img alt="" src="" width="700px" style="border: 1px solid black">
+        
+        <br>
+        <h3>References</h3>
+        
+	    <ul>
+		    <li><a href="https://colorbrewer2.org/#type=sequential&scheme=BuGn&n=3" target="_blank">Color Brewer (for selecting correct colors)</a></li>
+		    <li><a href="https://www.reddit.com/r/MapPorn/comments/7unpzs/regions_of_the_world_according_to_league_of/" target="_blank">League of Legends Regions</a></li>
+		    <li><a href="https://commons.wikimedia.org/wiki/File:World_map_-_low_resolution.svg" target="_blank">SVG File of Map for Region Selection</a></li>
+            <li><a href="https://lol.fandom.com/wiki/Portal:Servers#cite_note-6" target="_blank">League of Legends Region/Server Locations</a></li>
+	    </ul>
+        
+    </div>
+</body>
+</html>
